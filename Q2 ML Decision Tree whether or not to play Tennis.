@@ -1,0 +1,32 @@
+Write a python program to implement Decision Tree whether or not to play Tennis.
+
+import numpy as np
+import pandas as pd
+
+PlayTennis = pd.read_csv("PlayTennis.csv") 
+
+#We can convert all the non numerical values into numerical values using LabelEncoder
+from sklearn.preprocessing import LabelEncoder
+Le = LabelEncoder()
+
+PlayTennis['outlook'] = Le.fit_transform(PlayTennis['outlook'])
+PlayTennis['temp'] = Le.fit_transform(PlayTennis['temp'])
+PlayTennis['humidity'] = Le.fit_transform(PlayTennis['humidity'])
+PlayTennis['windy'] = Le.fit_transform(PlayTennis['windy'])
+PlayTennis['play'] = Le.fit_transform(PlayTennis['play'])
+
+#Lets split the training data and its coresponding prediction values.
+y = PlayTennis['play'] 
+X = PlayTennis.drop(['play'],axis=1) 
+
+# Fitting the model
+from sklearn import tree 
+clf = tree.DecisionTreeClassifier(criterion = 'entropy') 
+clf = clf.fit(X, y)
+
+# We can visualize the tree using tree.plot_tree
+tree.plot_tree(clf)
+import graphviz 
+dot_data = tree.export_graphviz(clf, out_file=None) 
+graph = graphviz.Source(dot_data) 
+graph
